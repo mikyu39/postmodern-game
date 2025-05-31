@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2cwt2y72sqmh"]
+[gd_scene load_steps=6 format=3 uid="uid://c2cwt2y72sqmh"]
 
 [ext_resource type="Texture2D" uid="uid://d1bua8tkr7d8r" path="res://Assets/PJSK assets/default.png" id="1_cxnnh"]
+[ext_resource type="Script" uid="uid://wy6osnbsi21i" path="res://Scripts/rhythm_game.gd" id="1_s6ga1"]
 [ext_resource type="Texture2D" uid="uid://ciettg31ax3sp" path="res://Assets/PJSK assets/judgement.png" id="2_76km0"]
 [ext_resource type="Texture2D" uid="uid://o8crydd5w0di" path="res://Assets/PJSK assets/notes.png" id="3_s6ga1"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_s6ga1"]
+size = Vector3(1, 1, 50)
+
 [node name="RhythmGame" type="Node3D"]
+script = ExtResource("1_s6ga1")
 
 [node name="Background" type="Sprite3D" parent="."]
 transform = Transform3D(14, 0, 0, 0, 10.404, -9.36783, 0, 9.36783, 10.404, 0, -39, 66)
@@ -27,8 +32,40 @@ region_rect = Rect2(0, 9.9, 1010, 45)
 transform = Transform3D(-1, 5.84973e-08, -6.49678e-08, 0, 0.743145, 0.669131, 8.74228e-08, 0.669131, -0.743145, 0, 5, -13)
 current = true
 
-[node name="Note" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.25, 0, 50)
-visibility_range_end = 4096.0
-modulate = Color(0, 1, 1, 1)
+[node name="Lane0Counter" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lane0Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 0, 13)
+shape = SubResource("BoxShape3D_s6ga1")
+
+[node name="Lane1Counter" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lane1Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0, 13)
+shape = SubResource("BoxShape3D_s6ga1")
+
+[node name="Lane2Counter" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lane2Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0, 13)
+shape = SubResource("BoxShape3D_s6ga1")
+
+[node name="Lane3Counter" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lane3Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75, 0, 13)
+shape = SubResource("BoxShape3D_s6ga1")
+
+[node name="endmarker" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.585, 0, -12)
+visible = false
 texture = ExtResource("3_s6ga1")
+
+[connection signal="body_entered" from="Lane0Counter" to="." method="_on_lane_0_counter_body_entered"]
+[connection signal="body_exited" from="Lane0Counter" to="." method="_on_lane_0_counter_body_exited"]
+[connection signal="body_entered" from="Lane1Counter" to="." method="_on_lane_1_counter_body_entered"]
+[connection signal="body_exited" from="Lane1Counter" to="." method="_on_lane_1_counter_body_exited"]
+[connection signal="body_entered" from="Lane2Counter" to="." method="_on_lane_2_counter_body_entered"]
+[connection signal="body_exited" from="Lane2Counter" to="." method="_on_lane_2_counter_body_exited"]
+[connection signal="body_entered" from="Lane3Counter" to="." method="_on_lane_3_counter_body_entered"]
+[connection signal="body_exited" from="Lane3Counter" to="." method="_on_lane_3_counter_body_exited"]

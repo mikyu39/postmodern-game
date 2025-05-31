@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://56eyrl3j88ir" path="res://Assets/Sidescroller Shooter - Central City/Background/Base Color.png" id="1_wrm1d"]
 [ext_resource type="Texture2D" uid="uid://jvgjs6ulwiph" path="res://Assets/Sidescroller Shooter - Central City/Social/MockUp-01.png" id="2_3dryh"]
-[ext_resource type="TileSet" uid="uid://b5tm32j1qeeup" path="res://tile_set.tres" id="3_wowpa"]
+[ext_resource type="TileSet" uid="uid://b5tm32j1qeeup" path="res://Assets/tile_set.tres" id="3_wowpa"]
 
 [node name="GameManager" type="Node2D"]
 
