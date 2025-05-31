@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnyh235psir8d"]
+
+[ext_resource type="Script" uid="uid://dq5u706biwwt4" path="res://Scripts/tap.gd" id="1_h00lo"]
+[ext_resource type="Texture2D" uid="uid://5ha7hmhcoi1n" path="res://Assets/PJSK assets/longnoteline.png" id="2_15vdg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p2nwh"]
+size = Vector3(2.385, 1, 0.4)
+
+[node name="HoldMiddle" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("1_h00lo")
+
+[node name="Note" type="Sprite3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+visibility_range_end = 4096.0
+modulate = Color(0.25098, 1, 0.478431, 1)
+texture = ExtResource("2_15vdg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00728762, 0, 0.0107139)
+shape = SubResource("BoxShape3D_p2nwh")
