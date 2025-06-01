@@ -1,22 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://gryix8hyhnog"]
+[gd_scene load_steps=5 format=3 uid="uid://gryix8hyhnog"]
 
-[ext_resource type="Script" uid="uid://dq5u706biwwt4" path="res://Scripts/tap.gd" id="1_jn0w3"]
+[ext_resource type="Script" uid="uid://bi5qxgajo16pc" path="res://Scripts/note.gd" id="1_k544t"]
 [ext_resource type="Texture2D" uid="uid://o8crydd5w0di" path="res://Assets/PJSK assets/notes.png" id="2_k544t"]
+[ext_resource type="Script" uid="uid://mv43wmgjsnkj" path="res://Scripts/tap.gd" id="2_tn2g6"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_h76s5"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_k544t"]
 size = Vector3(2.385, 1, 0.4)
 
 [node name="Tap" type="Node3D"]
+script = ExtResource("1_k544t")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-script = ExtResource("1_jn0w3")
+script = ExtResource("2_tn2g6")
 
 [node name="Note" type="Sprite3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -8.74228e-08, -1, 0, 2, -4.37114e-08, 0, 0, 0)
 visibility_range_end = 4096.0
 modulate = Color(0, 1, 1, 1)
 texture = ExtResource("2_k544t")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="Area3D" type="Area3D" parent="CharacterBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00728762, 0, 0.0107139)
-shape = SubResource("BoxShape3D_h76s5")
+shape = SubResource("BoxShape3D_k544t")

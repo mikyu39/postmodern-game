@@ -30,135 +30,185 @@ var lane3_time = []
 var lane3_type = []
 var in_lane3 = []
 
+var hold_l0 = false
+var hold_l1 = false
+var hold_l2 = false
+var hold_l3 = false
+
 var tap_note = preload("res://Scenes/notes/tap.tscn")
-var hold_start = preload("res://Scenes/notes/hold_start.tscn")
-var hold_middle = preload("res://Scenes/notes/hold_middle.tscn")
+var hold_front = preload("res://Scenes/notes/hold_start.tscn")
+var hold_mid = preload("res://Scenes/notes/hold_middle.tscn")
 
+@export
+var note_speed = 0
 
-var note_speed = 40
+var curtime = 0
 
-var curtime = 200
+var offset = 0
 
-var offset = -1000.0 / (note_speed/60.0)
-
-func spawn_tap(lane, expected_time):
+func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
 	cur_note.position.x = 3.75 - (lane * 2.5)
-	var start_time = expected_time + offset
 	var delta = curtime - start_time
 	var position_offset = (delta/1000) * note_speed
 	cur_note.position.z = 50-position_offset
+	cur_note.set_time(start_time - offset)
+	cur_note.set_type(0)
 	cur_note.get_child(0).velocity = Vector3(0, 0, -1 *note_speed)
 	add_child(cur_note)
 	
-func spawn_hold_start(lane, expected_time):
-	var cur_note = hold_start.instantiate()
+func spawn_hold_start(lane, start_time):
+	var cur_note = hold_front.instantiate()
 	cur_note.position.x = 3.75 - (lane * 2.5)
-	var start_time = expected_time + offset
 	var delta = curtime - start_time
 	var position_offset = (delta/1000) * note_speed
 	cur_note.position.z = 50-position_offset
+	cur_note.set_time(start_time - offset)
+	cur_note.set_type(1)
+	cur_note.set_lane(lane)
+	cur_note.save_reference(self)
 	cur_note.get_child(0).velocity = Vector3(0, 0, -1 *note_speed)
 	add_child(cur_note)
 	
-func spawn_hold_middle(lane, expected_time):
-	var cur_note = hold_middle.instantiate()
+func spawn_hold_middle(lane, start_time):
+	var cur_note = hold_mid.instantiate()
 	cur_note.position.x = 3.75 - (lane * 2.5)
-	var start_time = expected_time + offset
 	var delta = curtime - start_time
 	var position_offset = (delta/1000) * note_speed
 	cur_note.position.z = 50-position_offset
-	cur_note.get_child(0).velocity = Vector3(0, 0, -1 *note_speed)
+	cur_note.set_time(start_time - offset)
+	cur_note.set_type(2)
+	cur_note.get_child(0).velocity = Vector3(0, 0, -1 * note_speed)
 	add_child(cur_note)
 	
+func judge_time(dist):
+	if 125 < dist:
+		print("miss")
+	elif 108.3 < dist and dist <= 125:
+		print("bad")
+	elif 83.3 < dist and dist <= 108.3:
+		print('good')
+	elif 41.7 < dist and dist <= 83.3:
+		print('great')
+	elif dist <= 41.7:
+		print('perfect')
+
 func judge_l0():
-	if len(lane0_time) < 1:
+	if in_lane0.is_empty():
 		return
-	var dist =  abs(lane0_time[0] - curtime)
-	if dist < 250:
-		if 125 < dist:
-			print("miss")
-		elif 108.3 < dist and dist <= 125:
-			print("bad")
-		elif 83.3 < dist and dist <= 108.3:
-			print('good')
-		elif 41.7 < dist and dist <= 83.3:
-			print('great')
-		elif dist <= 41.7:
-			print('perfect')
-		lane0_time.pop_front()
-		lane0_type.pop_front()
-		var front = in_lane0.pop_front()
-		if front != null:
-			front.queue_free()
-	
+	var type = in_lane0[0].get_type()
+	var time = in_lane0[0].get_time()
+	var dist = abs(time - curtime)
+	if type == 0:
+		if dist < 150 and Input.is_action_just_pressed("lane0"):
+			var cur_note = in_lane0.pop_front()
+			judge_time(dist)
+			cur_note.visible = false
+			cur_note.free()
+	elif type == 1:
+		if dist < 150 and Input.is_action_just_pressed("lane0"):
+			var cur_note = in_lane0[0]
+			judge_time(dist)
+			cur_note.get_child(0).velocity = Vector3.ZERO
+			hold_l0 = true
+		elif Input.is_action_just_released("lane0") and hold_l0:
+			hold_l0 = false
+			var cur_note = in_lane0.pop_front()
+			while !in_lane0.size() == 0 and (in_lane0[0] == null or in_lane0[0].get_type() == 2):
+				var middle = in_lane0[0]
+				if is_instance_valid(middle):
+					middle.free()
+				in_lane0.pop_front()
+			cur_note.free()
+			
 func judge_l1():
-	if len(lane1_time) < 1:
+	if in_lane1.is_empty():
 		return
-	var dist =  abs(lane1_time[0] - curtime)
-	if dist < 250:
-		if 125 < dist:
-			print("miss")
-		elif 108.3 < dist and dist <= 125:
-			print("bad")
-		elif 83.3 < dist and dist <= 108.3:
-			print('good')
-		elif 41.7 < dist and dist <= 83.3:
-			print('great')
-		elif dist <= 41.7:
-			print('perfect')
-		lane1_time.pop_front()
-		lane1_type.pop_front()
-		var front = in_lane1.pop_front()
-		if front != null:
-			front.queue_free()
+	var type = in_lane1[0].get_type()
+	var time = in_lane1[0].get_time()
+	var dist = abs(time - curtime)
+	if type == 0:
+		if dist < 150 and Input.is_action_just_pressed("lane1"):
+			var cur_note = in_lane1.pop_front()
+			judge_time(dist)
+			cur_note.visible = false
+			cur_note.free()
+	elif type == 1:
+		if dist < 150 and Input.is_action_just_pressed("lane1"):
+			var cur_note = in_lane1[0]
+			judge_time(dist)
+			cur_note.get_child(0).velocity = Vector3.ZERO
+			hold_l1 = true
+		elif Input.is_action_just_released("lane1") and hold_l1:
+			hold_l1 = false
+			var cur_note = in_lane1.pop_front()
+			while !in_lane1.size() == 0 and (in_lane1[0] == null or in_lane1[0].get_type() == 2):
+				var middle = in_lane1[0]
+				if is_instance_valid(middle):
+					middle.free()
+				in_lane1.pop_front()
+			cur_note.free()
 		
 func judge_l2():
-	if len(lane2_time) < 1:
+	if in_lane2.is_empty():
 		return
-	var dist =  abs(lane2_time[0] - curtime)
-	if dist < 250:
-		if 125 < dist:
-			print("miss")
-		elif 108.3 < dist and dist <= 125:
-			print("bad")
-		elif 83.3 < dist and dist <= 108.3:
-			print('good')
-		elif 41.7 < dist and dist <= 83.3:
-			print('great')
-		elif dist <= 41.7:
-			print('perfect')
-		lane2_time.pop_front()
-		lane2_type.pop_front()
-		var front = in_lane2.pop_front()
-		if front != null:
-			front.queue_free()
+	var type = in_lane2[0].get_type()
+	var time = in_lane2[0].get_time()
+	var dist = abs(time - curtime)
+	if type == 0:
+		if dist < 150 and Input.is_action_just_pressed("lane2"):
+			var cur_note = in_lane2.pop_front()
+			judge_time(dist)
+			cur_note.visible = false
+			cur_note.free()
+	elif type == 1:
+		if dist < 150 and Input.is_action_just_pressed("lane2"):
+			var cur_note = in_lane2[0]
+			judge_time(dist)
+			cur_note.get_child(0).velocity = Vector3.ZERO
+			hold_l2 = true
+		elif Input.is_action_just_released("lane2") and hold_l2:
+			hold_l2 = false
+			var cur_note = in_lane2.pop_front()
+			while !in_lane2.size() == 0 and (in_lane2[0] == null or in_lane2[0].get_type() == 2):
+				var middle = in_lane2[0]
+				if is_instance_valid(middle):
+					middle.free()
+				in_lane2.pop_front()
+			cur_note.free()
 			
 func judge_l3():
-	if len(lane3_time) < 1:
+	if in_lane3.is_empty():
 		return
-	var dist =  abs(lane3_time[0] - curtime)
-	if dist < 250:
-		if 125 < dist:
-			print("miss")
-		elif 108.3 < dist and dist <= 125:
-			print("bad")
-		elif 83.3 < dist and dist <= 108.3:
-			print('good')
-		elif 41.7 < dist and dist <= 83.3:
-			print('great')
-		elif dist <= 41.7:
-			print('perfect')
-		lane3_time.pop_front()
-		lane3_type.pop_front()
-		var front = in_lane3.pop_front()
-		if front != null:
-			front.queue_free()
+	var type = in_lane3[0].get_type()
+	var time = in_lane3[0].get_time()
+	var dist = abs(time - curtime)
+	if type == 0:
+		if dist < 150 and Input.is_action_just_pressed("lane3"):
+			var cur_note = in_lane3.pop_front()
+			judge_time(dist)
+			cur_note.visible = false
+			cur_note.free()
+	elif type == 1:
+		if dist < 150 and Input.is_action_just_pressed("lane3"):
+			var cur_note = in_lane3[0]
+			judge_time(dist)
+			cur_note.get_child(0).velocity = Vector3.ZERO
+			hold_l3 = true
+		elif Input.is_action_just_released("lane3") and hold_l3:
+			hold_l3 = false
+			var cur_note = in_lane3.pop_front()
+			while !in_lane3.size() == 0 and (in_lane3[0] == null or in_lane3[0].get_type() == 2):
+				var middle = in_lane3[0]
+				if is_instance_valid(middle):
+					middle.free()
+				in_lane3.pop_front()
+			cur_note.free()
 		
 func generate_queues(path):
 	var file = FileAccess.open(path, FileAccess.READ)
 	file.get_csv_line()
-	while !file.eof_reached():
+	while file.get_position() < file.get_length():
 		var cur_line = file.get_csv_line()
 		var x = int(cur_line.get(1))
 		var time = int(cur_line.get(3))
@@ -193,7 +243,7 @@ func generate_queues(path):
 				lane0_queue_types.append(1)
 				lane0_time.append(time)
 				lane0_type.append(1)
-				for i in range(time+1, end + 1):
+				for i in range(time+16, end + 1, 16):
 					lane0_queue.append(i + offset)
 					lane0_queue_types.append(2)
 					lane0_time.append(time)
@@ -203,7 +253,7 @@ func generate_queues(path):
 				lane1_queue_types.append(1)
 				lane1_time.append(time)
 				lane1_type.append(1)
-				for i in range(time+1, end + 1):
+				for i in range(time+16, end + 1, 16):
 					lane1_queue.append(i + offset)
 					lane1_queue_types.append(2)
 					lane1_time.append(time)
@@ -213,7 +263,7 @@ func generate_queues(path):
 				lane2_queue_types.append(1)
 				lane2_time.append(time)
 				lane2_type.append(1)
-				for i in range(time+1, end + 1):
+				for i in range(time+16, end + 1, 16):
 					lane2_queue.append(i + offset)
 					lane2_queue_types.append(2)
 					lane2_time.append(time)
@@ -223,7 +273,7 @@ func generate_queues(path):
 				lane3_queue_types.append(1)
 				lane3_time.append(time)
 				lane3_type.append(1)
-				for i in range(time+1, end + 1):
+				for i in range(time+16, end + 1, 16):
 					lane3_queue.append(i + offset)
 					lane3_queue_types.append(2)
 					lane3_time.append(time)
@@ -232,103 +282,124 @@ func generate_queues(path):
 func check_and_spawn():
 	if len(lane0_queue) > 0:
 		if curtime >= lane0_queue[0]:
+			#print(lane0_queue[0])
+			#print(lane0_time[0])
+			#print(curtime)
+			#print("--------")
 			var type = lane0_queue_types.pop_front()
 			var time = lane0_queue.pop_front()
 			if type == 0:
-				spawn_tap(0, time-offset)
+				spawn_tap(0, time)
 			elif type == 1:
-				spawn_hold_start(0, time-offset)
+				spawn_hold_start(0, time)
 			elif type == 2:
-				spawn_hold_middle(0, time-offset)
+				spawn_hold_middle(0, time)
 	if len(lane1_queue) > 0:
 		if curtime >= lane1_queue[0]:
 			var type = lane1_queue_types.pop_front()
 			var time = lane1_queue.pop_front()
 			if type == 0:
-				spawn_tap(1, time-offset)
+				spawn_tap(1, time)
 			elif type == 1:
-				spawn_hold_start(1, time-offset)
+				spawn_hold_start(1, time)
 			elif type == 2:
-				spawn_hold_middle(1, time-offset)
+				spawn_hold_middle(1, time)
 	if len(lane2_queue) > 0:
 		if curtime >= lane2_queue[0]:
 			var type = lane2_queue_types.pop_front()
 			var time = lane2_queue.pop_front()
 			if type == 0:
-				spawn_tap(2, time-offset)
+				spawn_tap(2, time)
 			elif type == 1:
-				spawn_hold_start(2, time-offset)
+				spawn_hold_start(2, time)
 			elif type == 2:
-				spawn_hold_middle(2, time-offset)
+				spawn_hold_middle(2, time)
 	if len(lane3_queue) > 0:
 		if curtime >= lane3_queue[0]:
 			var type = lane3_queue_types.pop_front()
 			var time = lane3_queue.pop_front()
 			if type == 0:
-				spawn_tap(3, time-offset)
+				spawn_tap(3, time)
 			elif type == 1:
-				spawn_hold_start(3, time-offset)
+				spawn_hold_start(3, time)
 			elif type == 2:
-				spawn_hold_middle(3, time-offset)
+				spawn_hold_middle(3, time)
 		
+func register_hold(lane):
+	if Input.is_action_pressed("lane" + str(lane)):
+		print("perfect")
 		
-
 func _physics_process(delta: float) -> void:
 	check_and_spawn()
 	curtime += delta*1000
-	if Input.is_action_just_pressed("lane0"):
-		judge_l0()
-	if Input.is_action_just_pressed("lane1"):
-		judge_l1()
-		print(curtime)
-	if Input.is_action_just_pressed("lane2"):
-		judge_l2()
-		print(curtime)
-	if Input.is_action_just_pressed("lane3"):
-		judge_l3()
-
+	#if len(in_lane0) > 0:
+		#in_lane0[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
+	#if len(in_lane1) > 0:
+		#in_lane1[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
+	#if len(in_lane2) > 0:
+		#in_lane2[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
+	#if len(in_lane3) > 0:
+		#in_lane3[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
+	judge_l0()
+	judge_l1()
+	judge_l2()
+	judge_l3()
+	
 func _ready() -> void:
-	generate_queues("res://Maps/map1.csv")
-	#curtime += offset
-	print(curtime)
-	print(lane0_queue[0])
-	print(lane0_time[0])
-	print(lane1_queue[0])
-	print(lane1_time[0])
-	print(lane2_queue[0])
-	print(lane2_time[0])
-	print(lane3_queue[0])
-	print(lane3_time[0])
+	offset = -1000.0 / (note_speed/60.0)
+	generate_queues("res://Maps/map2.csv")
+
+func _on_lane_0_counter_area_entered(area: Area3D) -> void:
+	in_lane0.push_back(area.get_parent_node_3d().get_parent_node_3d())
 
 
-func _on_lane_0_counter_body_entered(body: Node3D) -> void:
-	in_lane0.push_back(body.get_parent_node_3d())
+func _on_lane_0_counter_area_exited(area: Area3D) -> void:
+	var node = area.get_parent_node_3d().get_parent_node_3d()
+	if !in_lane0.is_empty():
+		if node == in_lane0[0]:
+			lane0_time.pop_front()
+			lane0_type.pop_front()
+			in_lane0.pop_front()
+			node.queue_free()
 
-func _on_lane_0_counter_body_exited(body: Node3D) -> void:
-	body.get_parent_node_3d().queue_free()
-	lane0_time.pop_front()
-	lane0_type.pop_front()
 
-func _on_lane_1_counter_body_entered(body: Node3D) -> void:
-	in_lane1.push_back(body.get_parent_node_3d())
+func _on_lane_1_counter_area_entered(area: Area3D) -> void:
+	in_lane1.push_back(area.get_parent_node_3d().get_parent_node_3d())
+	var node = area.get_parent_node_3d().get_parent_node_3d()
 
-func _on_lane_1_counter_body_exited(body: Node3D) -> void:
-	body.get_parent_node_3d().queue_free()
-	lane1_time.pop_front()
-	lane1_type.pop_front()
 
-func _on_lane_2_counter_body_entered(body: Node3D) -> void:
-	in_lane2.push_back(body.get_parent_node_3d())
+func _on_lane_1_counter_area_exited(area: Area3D) -> void:
+	var node = area.get_parent_node_3d().get_parent_node_3d()
+	if !in_lane1.is_empty():
+		if node == in_lane1[0]:
+			lane1_time.pop_front()
+			lane1_type.pop_front()
+			in_lane1.pop_front()
+			node.queue_free()
 
-func _on_lane_2_counter_body_exited(body: Node3D) -> void:
-	body.get_parent_node_3d().queue_free()
-	lane2_time.pop_front()
-	lane2_type.pop_front()
 
-func _on_lane_3_counter_body_entered(body: Node3D) -> void:
-	in_lane3.push_back(body.get_parent_node_3d())
+func _on_lane_2_counter_area_entered(area: Area3D) -> void:
+	in_lane2.push_back(area.get_parent_node_3d().get_parent_node_3d())
 
-func _on_lane_3_counter_body_exited(body: Node3D) -> void:
-	body.get_parent_node_3d().queue_free()
-	lane3_time.pop_front()
-	lane3_type.pop_front()
+func _on_lane_2_counter_area_exited(area: Area3D) -> void:
+	var node = area.get_parent_node_3d().get_parent_node_3d()
+	if !in_lane2.is_empty():
+		if node == in_lane2[0]:
+			lane2_time.pop_front()
+			lane2_type.pop_front()
+			in_lane2.pop_front()
+			node.queue_free()
+
+
+func _on_lane_3_counter_area_entered(area: Area3D) -> void:
+	in_lane3.push_back(area.get_parent_node_3d().get_parent_node_3d())
+
+
+func _on_lane_3_counter_area_exited(area: Area3D) -> void:
+	var node = area.get_parent_node_3d().get_parent_node_3d()
+	if !in_lane3.is_empty():
+		if node == in_lane3[0]:
+			lane3_time.pop_front()
+			lane3_type.pop_front()
+			in_lane3.pop_front()
+			node.queue_free()
