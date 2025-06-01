@@ -46,6 +46,8 @@ var curtime = 0
 
 var offset = 0
 
+const hold_note_offset = 24
+
 func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
 	cur_note.position.x = 3.75 - (lane * 2.5)
@@ -111,6 +113,7 @@ func judge_l0():
 			judge_time(dist)
 			cur_note.get_child(0).velocity = Vector3.ZERO
 			hold_l0 = true
+			cur_note.set_checking(true)
 		elif Input.is_action_just_released("lane0") and hold_l0:
 			hold_l0 = false
 			var cur_note = in_lane0.pop_front()
@@ -139,6 +142,7 @@ func judge_l1():
 			judge_time(dist)
 			cur_note.get_child(0).velocity = Vector3.ZERO
 			hold_l1 = true
+			cur_note.set_checking(true)
 		elif Input.is_action_just_released("lane1") and hold_l1:
 			hold_l1 = false
 			var cur_note = in_lane1.pop_front()
@@ -167,6 +171,7 @@ func judge_l2():
 			judge_time(dist)
 			cur_note.get_child(0).velocity = Vector3.ZERO
 			hold_l2 = true
+			cur_note.set_checking(true)
 		elif Input.is_action_just_released("lane2") and hold_l2:
 			hold_l2 = false
 			var cur_note = in_lane2.pop_front()
@@ -195,6 +200,7 @@ func judge_l3():
 			judge_time(dist)
 			cur_note.get_child(0).velocity = Vector3.ZERO
 			hold_l3 = true
+			cur_note.set_checking(true)
 		elif Input.is_action_just_released("lane3") and hold_l3:
 			hold_l3 = false
 			var cur_note = in_lane3.pop_front()
@@ -243,7 +249,7 @@ func generate_queues(path):
 				lane0_queue_types.append(1)
 				lane0_time.append(time)
 				lane0_type.append(1)
-				for i in range(time+16, end + 1, 16):
+				for i in range(time+hold_note_offset, end + 1, hold_note_offset):
 					lane0_queue.append(i + offset)
 					lane0_queue_types.append(2)
 					lane0_time.append(time)
@@ -253,7 +259,7 @@ func generate_queues(path):
 				lane1_queue_types.append(1)
 				lane1_time.append(time)
 				lane1_type.append(1)
-				for i in range(time+16, end + 1, 16):
+				for i in range(time+hold_note_offset, end + 1, hold_note_offset):
 					lane1_queue.append(i + offset)
 					lane1_queue_types.append(2)
 					lane1_time.append(time)
@@ -263,7 +269,7 @@ func generate_queues(path):
 				lane2_queue_types.append(1)
 				lane2_time.append(time)
 				lane2_type.append(1)
-				for i in range(time+16, end + 1, 16):
+				for i in range(time+hold_note_offset, end + 1, hold_note_offset):
 					lane2_queue.append(i + offset)
 					lane2_queue_types.append(2)
 					lane2_time.append(time)
@@ -273,7 +279,7 @@ func generate_queues(path):
 				lane3_queue_types.append(1)
 				lane3_time.append(time)
 				lane3_type.append(1)
-				for i in range(time+16, end + 1, 16):
+				for i in range(time+hold_note_offset, end + 1, hold_note_offset):
 					lane3_queue.append(i + offset)
 					lane3_queue_types.append(2)
 					lane3_time.append(time)
@@ -332,18 +338,14 @@ func register_hold(lane):
 func _physics_process(delta: float) -> void:
 	check_and_spawn()
 	curtime += delta*1000
-	#if len(in_lane0) > 0:
-		#in_lane0[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
-	#if len(in_lane1) > 0:
-		#in_lane1[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
-	#if len(in_lane2) > 0:
-		#in_lane2[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
-	#if len(in_lane3) > 0:
-		#in_lane3[0].get_child(0).get_child(0).modulate = Color(1, 1, 1, 1)
 	judge_l0()
 	judge_l1()
 	judge_l2()
 	judge_l3()
+	
+	if in_lane0.is_empty() and in_lane1.is_empty() and in_lane2.is_empty() and in_lane3.is_empty():
+		if lane0_queue.is_empty() and lane1_queue.is_empty() and lane2_queue.is_empty() and lane3_queue.is_empty():
+			print('win lol')
 	
 func _ready() -> void:
 	offset = -1000.0 / (note_speed/60.0)

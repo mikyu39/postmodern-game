@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://o8crydd5w0di" path="res://Assets/PJSK assets/notes.png" id="2_tj3bl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_byk4d"]
-size = Vector3(2.385, 1, 0.4)
+size = Vector3(2.385, 1, 0.6)
 
 [node name="HoldStart" type="Node3D"]
 script = ExtResource("1_tj3bl")

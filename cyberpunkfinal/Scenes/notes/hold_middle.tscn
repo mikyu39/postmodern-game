@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://mv43wmgjsnkj" path="res://Scripts/tap.gd" id="2_p2nwh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_15vdg"]
-size = Vector3(2.385, 1, 0.1)
+size = Vector3(2.385, 1, 1)
 
 [node name="HoldMiddle" type="Node3D"]
 script = ExtResource("1_15vdg")
@@ -24,5 +24,7 @@ region_rect = Rect2(33, 0, 238, 4)
 [node name="Area3D" type="Area3D" parent="CharacterBody3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00728762, 0, -0.555485)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007, 0, 0)
 shape = SubResource("BoxShape3D_15vdg")
+
+[connection signal="area_entered" from="CharacterBody3D/Area3D" to="." method="_on_area_3d_area_entered"]

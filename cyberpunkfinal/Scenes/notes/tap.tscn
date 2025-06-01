@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://mv43wmgjsnkj" path="res://Scripts/tap.gd" id="2_tn2g6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k544t"]
-size = Vector3(2.385, 1, 0.4)
+size = Vector3(2.385, 1, 0.6)
 
 [node name="Tap" type="Node3D"]
 script = ExtResource("1_k544t")
