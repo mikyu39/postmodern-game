@@ -42,6 +42,9 @@ var hold_mid = preload("res://Scenes/notes/hold_middle.tscn")
 @export
 var note_speed = 0
 
+@export
+var timer_offset = 0
+
 var curtime = 0
 
 var offset = 0
@@ -356,6 +359,7 @@ func _physics_process(delta: float) -> void:
 			print('win lol')
 	
 func _ready() -> void:
+	curtime += timer_offset
 	offset = -1000.0 / (note_speed/60.0)
 	$MusicPlayer.stream = load("res://Assets/Audio/map1.mp3")
 	$TapSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_perfect.mp3")

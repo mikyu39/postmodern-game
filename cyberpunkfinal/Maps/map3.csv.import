@@ -3,11 +3,13 @@
 importer="csv_translation"
 type="Translation"
 uid="uid://cw7iykyb7yksa"
-valid=false
 
 [deps]
 
+files=["res://Maps/map3.x.translation", "res://Maps/map3.y.translation", "res://Maps/map3.start.translation", "res://Maps/map3.type.translation", "res://Maps/map3.hitsound.translation", "res://Maps/map3.end.translation"]
+
 source_file="res://Maps/map3.csv"
+dest_files=["res://Maps/map3.x.translation", "res://Maps/map3.y.translation", "res://Maps/map3.start.translation", "res://Maps/map3.type.translation", "res://Maps/map3.hitsound.translation", "res://Maps/map3.end.translation"]
 
 [params]
 
