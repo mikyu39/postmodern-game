@@ -9,16 +9,19 @@ const GRAVITY = 400
 
 var last_left = false
 
+
 func _physics_process(delta):
 	# Horizontal movement code. First, get the player's input.
 	var walk := WALK_FORCE * (Input.get_axis(&"move_left", &"move_right"))
 	
-	if walk < 0:
+	if walk < 0 and !last_left:
+		scale.x = -1
 		last_left = true
-	elif walk > 0:
+	elif walk > 0 and last_left:
+		scale.x = -1
 		last_left = false
 	
-	$AnimatedSprite2D.flip_h = last_left
+		
 	# Slow down the player if they're not trying to move.
 	if abs(walk) < WALK_FORCE * 0.2:
 		# The velocity, slowed down a bit, and then reassigned.
