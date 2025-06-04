@@ -10,7 +10,7 @@ size = Vector3(1, 1, 70)
 
 [node name="RhythmGame" type="Node3D"]
 script = ExtResource("1_s6ga1")
-note_speed = 30
+note_speed = 47
 timer_offset = -20
 
 [node name="Background" type="Sprite3D" parent="."]

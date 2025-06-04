@@ -55,6 +55,8 @@ var last_played_hold = -hold_sound_cd
 
 const hold_note_offset = 24
 
+var map = ""
+
 func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
 	cur_note.position.x = 3.75 - (lane * 2.5)
@@ -346,6 +348,11 @@ func register_hold(lane):
 			$HoldSoundPlayer.play()
 			last_played_hold = curtime
 		
+func set_map(in_map):
+	map = "map" + str(in_map)
+	print(map)
+	generate_queues("res://Maps/"+map+".csv")
+	
 func _physics_process(delta: float) -> void:
 	check_and_spawn()
 	curtime += delta*1000
@@ -361,10 +368,9 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	curtime += timer_offset
 	offset = -1000.0 / (note_speed/60.0)
-	$MusicPlayer.stream = load("res://Assets/Audio/map1.mp3")
+	$MusicPlayer.stream = load("res://Assets/Audio/"+map+".mp3")
 	$TapSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_perfect.mp3")
 	$HoldSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_connect.mp3")
-	generate_queues("res://Maps/map2.csv")
 	$MusicPlayer.play()
 
 func _on_lane_0_counter_area_entered(area: Area3D) -> void:
