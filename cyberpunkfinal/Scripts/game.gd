@@ -12,7 +12,17 @@ var can_psycho = false
 
 var can_interact_npc = false
 
+var can_change_room = false
+
+var is_teleporting = false
+
 var map = 0
+
+var player_dest = Vector2.ZERO
+
+var camera_dest = Vector2.ZERO
+
+
 
 @onready 
 var scene = preload("res://Scenes/rhythm_game.tscn").instantiate()
@@ -43,6 +53,19 @@ func update_enter_psycho(show):
 	can_psycho = show
 	if show:
 		show_text(0)
+		
+func update_change_room(can_move, camera, player):
+	if !can_move and !is_teleporting:
+		can_change_room = false
+		hide_text()
+		print("hide")
+		
+	elif can_move:
+		can_change_room = true
+		camera_dest = camera
+		player_dest = player
+		show_text(2)
+		print('show')
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
@@ -56,4 +79,8 @@ func _physics_process(delta: float) -> void:
 			text.visible = true
 			text.scroll_text()
 			update_enter_psycho(true)
+		if can_change_room:
+			player.global_position = player_dest
+			$Camera2D.position = camera_dest
+			is_teleporting = true
 		

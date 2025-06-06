@@ -1,6 +1,5 @@
 extends Node3D
 
-
 var lane0_queue = []
 var lane1_queue = []
 var lane2_queue = []
@@ -352,6 +351,9 @@ func set_map(in_map):
 	map = "map" + str(in_map)
 	print(map)
 	generate_queues("res://Maps/"+map+".csv")
+	$MusicPlayer.stream = load("res://Assets/Audio/"+map+".mp3")
+	curtime = 0
+	$MusicPlayer.play()
 	
 func _physics_process(delta: float) -> void:
 	check_and_spawn()
@@ -368,10 +370,8 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	curtime += timer_offset
 	offset = -1000.0 / (note_speed/60.0)
-	$MusicPlayer.stream = load("res://Assets/Audio/"+map+".mp3")
 	$TapSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_perfect.mp3")
 	$HoldSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_connect.mp3")
-	$MusicPlayer.play()
 
 func _on_lane_0_counter_area_entered(area: Area3D) -> void:
 	in_lane0.push_back(area.get_parent_node_3d().get_parent_node_3d())
