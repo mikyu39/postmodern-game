@@ -6,9 +6,9 @@
 [ext_resource type="TileSet" uid="uid://b5tm32j1qeeup" path="res://Assets/tile_set.tres" id="3_i6g32"]
 [ext_resource type="PackedScene" uid="uid://c3bv3fafgo3sa" path="res://Scenes/player.tscn" id="4_1l0tm"]
 [ext_resource type="FontFile" uid="uid://caxcdvapyomap" path="res://Assets/Interceptor.otf" id="4_i6g32"]
-[ext_resource type="Script" uid="uid://c5mnqb2s8ryt6" path="res://Scripts/text_box.gd" id="5_h4fw4"]
+[ext_resource type="Script" path="res://Scripts/text_box.gd" id="5_h4fw4"]
 [ext_resource type="PackedScene" uid="uid://63nykbhk1dom" path="res://Scenes/npc.tscn" id="5_wowpa"]
-[ext_resource type="Script" uid="uid://bat7s18765fuv" path="res://Scenes/teleporter.gd" id="9_h4fw4"]
+[ext_resource type="Script" uid="uid://bat7s18765fuv" path="res://Scripts/teleporter.gd" id="9_h4fw4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldgsr"]
 size = Vector2(39, 96)

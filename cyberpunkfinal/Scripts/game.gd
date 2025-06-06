@@ -55,17 +55,18 @@ func update_enter_psycho(show):
 		show_text(0)
 		
 func update_change_room(can_move, camera, player):
-	if !can_move and !is_teleporting:
-		can_change_room = false
-		hide_text()
-		print("hide")
+	if !can_move:
+		if is_teleporting:
+			is_teleporting = false
+		else:
+			can_change_room = false
+			hide_text()
 		
 	elif can_move:
 		can_change_room = true
 		camera_dest = camera
 		player_dest = player
 		show_text(2)
-		print('show')
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
