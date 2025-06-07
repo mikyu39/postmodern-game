@@ -61,11 +61,15 @@ var combo = 0
 
 var max_combo = 0
 
+var max_score = 0
+
 var score = 0
 
 var t_judge = 1.0
 
 var t_combo = 1.0
+
+var scene = preload("res://Scenes/game.tscn").instantiate()
 
 func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
@@ -135,6 +139,7 @@ func judge_time(dist):
 		judgement = 'perfect'
 		combo += 1
 		score += 4
+	max_score += 4
 	show_judgement(judgement)
 	show_combo(combo)
 	$TapSoundPlayer.play()
@@ -420,7 +425,11 @@ func _physics_process(delta: float) -> void:
 	
 	if in_lane0.is_empty() and in_lane1.is_empty() and in_lane2.is_empty() and in_lane3.is_empty():
 		if lane0_queue.is_empty() and lane1_queue.is_empty() and lane2_queue.is_empty() and lane3_queue.is_empty():
-			print('win lol')
+			get_tree().root.add_child(scene)
+			# update the hair value to the new scene
+			get_node("/root/GameManager").show_results(score/(max_score))
+			# free the current scene
+			get_node("/root/RhythmGame").free()
 	
 func _ready() -> void:
 	curtime += timer_offset

@@ -49,6 +49,7 @@ position = Vector2(270, 239)
 position = Vector2(54, 104)
 version = 2
 blurb = "lmao i'm not a replicant fr ong"
+rep_val = -1
 
 [node name="Teleporter" type="Node2D" parent="."]
 position = Vector2(508.5, 208)

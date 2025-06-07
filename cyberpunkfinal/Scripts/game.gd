@@ -16,13 +16,15 @@ var can_change_room = false
 
 var is_teleporting = false
 
+var rep_val = 0
+
 var map = 0
 
 var player_dest = Vector2.ZERO
 
 var camera_dest = Vector2.ZERO
 
-
+var rng = RandomNumberGenerator.new()
 
 @onready 
 var scene = preload("res://Scenes/rhythm_game.tscn").instantiate()
@@ -38,12 +40,13 @@ func hide_text():
 	for i in range(len(interact_texts.get_children())):
 		interact_texts.get_children()[i].visible = false
 
-func update_interact_npc(blurb, can_detect, in_map):
+func update_interact_npc(blurb, can_detect, in_map, rep):
 	text.set_text(blurb)
 	can_interact_npc = can_detect
 	if can_detect:
 		show_text(1)
 		map = in_map
+		rep_val = rep
 	else:
 		hide_text()
 		text.visible = false
@@ -67,6 +70,30 @@ func update_change_room(can_move, camera, player):
 		camera_dest = camera
 		player_dest = player
 		show_text(2)
+		
+func show_results(accuracy):
+	var grade = ""
+	if accuracy > 0.95: 
+		grade = 'S'
+	elif accuracy > 0.9:
+		grade = 'A'
+	elif accuracy > 0.8:
+		grade = 'B'
+	elif accuracy > 0.7:
+		grade = 'C'
+	elif accuracy > 0.6: 
+		grade = 'D'
+	else: 
+		grade = 'F'
+	
+	var text_acc = str(round(accuracy * 10000)/100) + "%"
+	
+	$Camera2D/Results/Panel/AccVal.text = text_acc
+	$Camera2D/Results/Panel/Grade.text = grade
+	$Camera2D/Results/Panel/Replicant.text = 'Replicant Status:' + str(accuracy * rep_val + rng.randf_range(-0.85, 0.85))
+	$Camera2D/Results.visible = true
+	
+	
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
