@@ -56,7 +56,6 @@ grow_vertical = 2
 pivot_offset = Vector2(134, 22)
 theme_override_fonts/normal_font = ExtResource("4_lvn8m")
 theme_override_font_sizes/normal_font_size = 40
-text = "Perfect"
 horizontal_alignment = 1
 
 [node name="Combo" type="Control" parent="Camera3D/Control"]
@@ -65,6 +64,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ComboLabel" type="RichTextLabel" parent="Camera3D/Control/Combo"]
+visible = false
 offset_left = 819.0
 offset_top = 157.0
 offset_right = 1087.0
@@ -75,6 +75,7 @@ text = "Combo"
 horizontal_alignment = 1
 
 [node name="ComboNum" type="RichTextLabel" parent="Camera3D/Control/Combo"]
+visible = false
 offset_left = 885.0
 offset_top = 201.0
 offset_right = 1033.0

@@ -121,22 +121,22 @@ func show_combo(combo):
 func judge_time(dist):
 	var judgement = ""
 	if 125 < dist:
-		judgement = "miss"
+		judgement = "Miss"
 		combo = 0
 	elif 108.3 < dist and dist <= 125:
-		judgement = "bad"
+		judgement = "Bad"
 		combo = 0
 		score += 1
 	elif 83.3 < dist and dist <= 108.3:
-		judgement = 'good'
+		judgement = 'Good'
 		combo = 0
 		score += 2
 	elif 41.7 < dist and dist <= 83.3:
-		judgement = 'great'
+		judgement = 'Great'
 		combo += 1
 		score += 3
 	elif dist <= 41.7:
-		judgement = 'perfect'
+		judgement = 'Perfect'
 		combo += 1
 		score += 4
 	max_score += 4
@@ -425,13 +425,15 @@ func _physics_process(delta: float) -> void:
 	
 	if in_lane0.is_empty() and in_lane1.is_empty() and in_lane2.is_empty() and in_lane3.is_empty():
 		if lane0_queue.is_empty() and lane1_queue.is_empty() and lane2_queue.is_empty() and lane3_queue.is_empty():
+			print(scene)
 			get_tree().root.add_child(scene)
 			# update the hair value to the new scene
-			get_node("/root/GameManager").show_results(score/(max_score))
+			get_node("/root/GameManager").show_results(float(score)/(max_score))
 			# free the current scene
 			get_node("/root/RhythmGame").free()
 	
 func _ready() -> void:
+	scene = load("res://Scenes/game.tscn").instantiate()
 	curtime += timer_offset
 	offset = -1000.0 / (note_speed/60.0)
 	$TapSoundPlayer.stream = load("res://Assets/Audio/hitsounds/se_live_perfect.mp3")

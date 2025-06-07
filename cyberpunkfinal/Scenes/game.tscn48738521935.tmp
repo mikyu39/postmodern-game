@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://crhv720fujilk"]
+[gd_scene load_steps=13 format=4 uid="uid://crhv720fujilk"]
 
 [ext_resource type="Texture2D" uid="uid://56eyrl3j88ir" path="res://Assets/Sidescroller Shooter - Central City/Background/Base Color.png" id="1_3dryh"]
 [ext_resource type="Script" uid="uid://btraov718hnvb" path="res://Scripts/game.gd" id="1_v158k"]
@@ -13,6 +13,10 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldgsr"]
 size = Vector2(39, 96)
+
+[sub_resource type="GDScript" id="GDScript_ldgsr"]
+script/source = "extends Node2D
+"
 
 [node name="GameManager" type="Node2D"]
 script = ExtResource("1_v158k")
@@ -77,9 +81,6 @@ shape = SubResource("RectangleShape2D_ldgsr")
 position = Vector2(272, 144)
 zoom = Vector2(2.25, 2.25)
 
-[node name="Results" parent="Camera2D" instance=ExtResource("10_ldgsr")]
-position = Vector2(-244, -137)
-
 [node name="UI" type="Control" parent="Camera2D"]
 texture_filter = 3
 layout_mode = 3
@@ -88,7 +89,6 @@ offset_left = -272.0
 offset_top = -144.0
 offset_right = -232.0
 offset_bottom = -104.0
-mouse_filter = 2
 
 [node name="TextBox" type="Panel" parent="Camera2D/UI"]
 visible = false
@@ -147,6 +147,10 @@ offset_bottom = 303.0
 theme_override_fonts/normal_font = ExtResource("4_i6g32")
 text = "press F to leave current area"
 horizontal_alignment = 1
+
+[node name="Results" parent="Camera2D" instance=ExtResource("10_ldgsr")]
+position = Vector2(-234, -151)
+script = SubResource("GDScript_ldgsr")
 
 [connection signal="body_entered" from="Teleporter/Area2D" to="Teleporter" method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Teleporter/Area2D" to="Teleporter" method="_on_area_2d_body_exited"]

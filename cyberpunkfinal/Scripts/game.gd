@@ -86,11 +86,13 @@ func show_results(accuracy):
 	else: 
 		grade = 'F'
 	
-	var text_acc = str(round(accuracy * 10000)/100) + "%"
+	var text_acc = str((round(accuracy * 10000))/100) + "%"
+	print(accuracy)
 	
 	$Camera2D/Results/Panel/AccVal.text = text_acc
 	$Camera2D/Results/Panel/Grade.text = grade
-	$Camera2D/Results/Panel/Replicant.text = 'Replicant Status:' + str(accuracy * rep_val + rng.randf_range(-0.85, 0.85))
+	var changed_rep = (accuracy * rep_val) + rng.randf_range(-0.85, 0.85)
+	$Camera2D/Results/Panel/Replicant.text = 'Replicant Status:' + str(round((changed_rep * 10000))/100)
 	$Camera2D/Results.visible = true
 	
 	
