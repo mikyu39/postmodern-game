@@ -54,7 +54,18 @@ var last_played_hold = -hold_sound_cd
 
 const hold_note_offset = 24
 
+@export
 var map = ""
+
+var combo = 0
+
+var max_combo = 0
+
+var score = 0
+
+var t_judge = 1.0
+
+var t_combo = 1.0
 
 func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
@@ -90,18 +101,42 @@ func spawn_hold_middle(lane, start_time):
 	cur_note.set_type(2)
 	cur_note.get_child(0).velocity = Vector3(0, 0, -1 * note_speed)
 	add_child(cur_note)
+
+func show_judgement(judge):
+	$Camera3D/Control/Judgement.text = judge
+	$Camera3D/Control/Judgement.scale = Vector2(0.6, 0.6)
+	t_judge = 0.6
+	
+func show_combo(combo):
+	$Camera3D/Control/Combo/ComboNum.visible = (combo > 0)
+	$Camera3D/Control/Combo/ComboLabel.visible = (combo > 0)
+	$Camera3D/Control/Combo/ComboNum.text = str(combo)
+	$Camera3D/Control/Combo/ComboNum.scale = Vector2(0.6, 0.6)
+	t_combo = 0.6
 	
 func judge_time(dist):
+	var judgement = ""
 	if 125 < dist:
-		print("miss")
+		judgement = "miss"
+		combo = 0
 	elif 108.3 < dist and dist <= 125:
-		print("bad")
+		judgement = "bad"
+		combo = 0
+		score += 1
 	elif 83.3 < dist and dist <= 108.3:
-		print('good')
+		judgement = 'good'
+		combo = 0
+		score += 2
 	elif 41.7 < dist and dist <= 83.3:
-		print('great')
+		judgement = 'great'
+		combo += 1
+		score += 3
 	elif dist <= 41.7:
-		print('perfect')
+		judgement = 'perfect'
+		combo += 1
+		score += 4
+	show_judgement(judgement)
+	show_combo(combo)
 	$TapSoundPlayer.play()
 
 func judge_l0():
@@ -129,6 +164,8 @@ func judge_l0():
 			while !in_lane0.size() == 0 and (in_lane0[0] == null or in_lane0[0].get_type() == 2):
 				var middle = in_lane0[0]
 				if is_instance_valid(middle):
+					if middle.get_type() == 1:
+						break
 					middle.free()
 				in_lane0.pop_front()
 			cur_note.free()
@@ -158,6 +195,8 @@ func judge_l1():
 			while !in_lane1.size() == 0 and (in_lane1[0] == null or in_lane1[0].get_type() == 2):
 				var middle = in_lane1[0]
 				if is_instance_valid(middle):
+					if middle.get_type() == 1:
+						break
 					middle.free()
 				in_lane1.pop_front()
 			cur_note.free()
@@ -187,6 +226,8 @@ func judge_l2():
 			while !in_lane2.size() == 0 and (in_lane2[0] == null or in_lane2[0].get_type() == 2):
 				var middle = in_lane2[0]
 				if is_instance_valid(middle):
+					if middle.get_type() == 1:
+						break
 					middle.free()
 				in_lane2.pop_front()
 			cur_note.free()
@@ -216,6 +257,8 @@ func judge_l3():
 			while !in_lane3.size() == 0 and (in_lane3[0] == null or in_lane3[0].get_type() == 2):
 				var middle = in_lane3[0]
 				if is_instance_valid(middle):
+					if middle.get_type() == 1:
+						break
 					middle.free()
 				in_lane3.pop_front()
 			cur_note.free()
@@ -342,8 +385,8 @@ func check_and_spawn():
 		
 func register_hold(lane):
 	if Input.is_action_pressed("lane" + str(lane)):
-		print("perfect")
 		if curtime - last_played_hold >= hold_sound_cd:
+			judge_time(0)
 			$HoldSoundPlayer.play()
 			last_played_hold = curtime
 		
@@ -356,6 +399,18 @@ func set_map(in_map):
 	$MusicPlayer.play()
 	
 func _physics_process(delta: float) -> void:
+	t_judge += 0.1 * delta
+	
+	t_judge = (1 - cos(PI * t_judge)) / 2
+	
+	$Camera3D/Control/Judgement.scale = $Camera3D/Control/Judgement.scale.lerp(Vector2i(1, 1), t_judge)
+	
+	t_combo += 0.1 * delta
+	
+	t_combo = (1 - cos(PI * t_combo)) / 2
+	
+	$Camera3D/Control/Combo/ComboNum.scale = $Camera3D/Control/Combo/ComboNum.scale.lerp(Vector2i(1, 1), t_combo)
+	
 	check_and_spawn()
 	curtime += delta*1000
 	judge_l0()

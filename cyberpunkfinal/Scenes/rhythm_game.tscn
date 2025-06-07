@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2cwt2y72sqmh"]
+[gd_scene load_steps=7 format=3 uid="uid://c2cwt2y72sqmh"]
 
 [ext_resource type="Texture2D" uid="uid://d1bua8tkr7d8r" path="res://Assets/PJSK assets/default.png" id="1_cxnnh"]
 [ext_resource type="Script" uid="uid://wy6osnbsi21i" path="res://Scripts/rhythm_game.gd" id="1_s6ga1"]
 [ext_resource type="Texture2D" uid="uid://ciettg31ax3sp" path="res://Assets/PJSK assets/judgement.png" id="2_76km0"]
 [ext_resource type="Texture2D" uid="uid://o8crydd5w0di" path="res://Assets/PJSK assets/notes.png" id="3_s6ga1"]
+[ext_resource type="FontFile" uid="uid://caxcdvapyomap" path="res://Assets/Interceptor.otf" id="4_lvn8m"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s6ga1"]
 size = Vector3(1, 1, 70)
@@ -12,6 +13,7 @@ size = Vector3(1, 1, 70)
 script = ExtResource("1_s6ga1")
 note_speed = 47
 timer_offset = -20
+map = "1"
 
 [node name="Background" type="Sprite3D" parent="."]
 transform = Transform3D(14, 0, 0, 0, 10.404, -9.36783, 0, 9.36783, 10.404, 0, -39, 66)
@@ -33,6 +35,55 @@ region_rect = Rect2(0, 9.9, 1010, 45)
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-1, 5.84973e-08, -6.49678e-08, 0, 0.743145, 0.669131, 8.74228e-08, 0.669131, -0.743145, 0, 5, -13)
 current = true
+
+[node name="Control" type="Control" parent="Camera3D"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Judgement" type="RichTextLabel" parent="Camera3D/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 28.805
+anchor_bottom = 16.199
+offset_left = 442.0
+offset_top = 380.0
+offset_right = -442.2
+offset_bottom = -222.96
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(134, 22)
+theme_override_fonts/normal_font = ExtResource("4_lvn8m")
+theme_override_font_sizes/normal_font_size = 40
+text = "Perfect"
+horizontal_alignment = 1
+
+[node name="Combo" type="Control" parent="Camera3D/Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ComboLabel" type="RichTextLabel" parent="Camera3D/Control/Combo"]
+offset_left = 819.0
+offset_top = 157.0
+offset_right = 1087.0
+offset_bottom = 218.0
+theme_override_fonts/normal_font = ExtResource("4_lvn8m")
+theme_override_font_sizes/normal_font_size = 40
+text = "Combo"
+horizontal_alignment = 1
+
+[node name="ComboNum" type="RichTextLabel" parent="Camera3D/Control/Combo"]
+offset_left = 885.0
+offset_top = 201.0
+offset_right = 1033.0
+offset_bottom = 292.0
+pivot_offset = Vector2(74, 35)
+theme_override_fonts/normal_font = ExtResource("4_lvn8m")
+theme_override_font_sizes/normal_font_size = 80
+text = "20"
+horizontal_alignment = 1
 
 [node name="Lane0Counter" type="Area3D" parent="."]
 
