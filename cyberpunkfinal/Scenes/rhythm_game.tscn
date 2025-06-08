@@ -65,6 +65,7 @@ offset_bottom = 40.0
 
 [node name="ComboLabel" type="RichTextLabel" parent="Camera3D/Control/Combo"]
 visible = false
+layout_mode = 0
 offset_left = 819.0
 offset_top = 157.0
 offset_right = 1087.0
@@ -76,6 +77,7 @@ horizontal_alignment = 1
 
 [node name="ComboNum" type="RichTextLabel" parent="Camera3D/Control/Combo"]
 visible = false
+layout_mode = 0
 offset_left = 885.0
 offset_top = 201.0
 offset_right = 1033.0
