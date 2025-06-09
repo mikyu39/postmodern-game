@@ -26,8 +26,17 @@ var camera_dest = Vector2.ZERO
 
 var rng = RandomNumberGenerator.new()
 
+var is_easy = false
+
+var replicant = [-1,1,1,1,1]
+var maps = [1,2,3,4,5]
+
+var winning = false
+
 @onready 
-var scene = preload("res://Scenes/rhythm_game.tscn").instantiate()
+var scene = load("res://Scenes/rhythm_game.tscn").instantiate()
+
+var title = load("res://Scenes/title.tscn")
 
 func show_text(show):
 	for i in range(len(interact_texts.get_children())):
@@ -96,13 +105,26 @@ func show_results(accuracy):
 	$Camera2D/Results.visible = true
 	
 	
-
+func set_game(difficulty):
+	is_easy = difficulty
+	replicant.shuffle()
+	maps.shuffle()
+	
+	print(maps)
+	print(replicant)
+	
+	for i in range(5):
+		var node = get_node("NPC" + str(i))
+		node.map = maps[i]
+		node.rep_val = replicant[i]
+		
+	
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		if can_psycho:
 			get_tree().root.add_child(scene)
 			# update the hair value to the new scene
-			get_node("/root/RhythmGame").set_map(map)
+			get_node("/root/RhythmGame").set_map(map, is_easy)
 			# free the current scene
 			get_node("/root/GameManager").free()
 		if can_interact_npc:
@@ -114,3 +136,22 @@ func _physics_process(delta: float) -> void:
 			$Camera2D.position = camera_dest
 			is_teleporting = true
 		
+
+func _on_mark_replicant_item_selected(index: int) -> void:
+	print(index)
+	print(replicant[index])
+	winning = (replicant[index] == -1)
+
+
+func _on_submit_pressed() -> void:
+	$Camera2D/UI/EndUI.visible = true
+	if winning: 
+		$Camera2D/UI/EndUI/Text.text = "You Win!"
+	else:
+		$Camera2D/UI/EndUI/Text.text = "You Lose!"
+	
+
+func _on_exit_pressed() -> void:
+	get_tree().root.add_child(title.instantiate())
+	# free the current scene
+	get_node("/root/GameManager").queue_free()

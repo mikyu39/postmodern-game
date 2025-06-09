@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dkujxo0uth5o8"
+
+[deps]
+
+files=["res://Maps/map4_easy.x.translation", "res://Maps/map4_easy.y.translation", "res://Maps/map4_easy.start.translation", "res://Maps/map4_easy.type.translation", "res://Maps/map4_easy.hitsound.translation", "res://Maps/map4_easy.end.translation"]
+
+source_file="res://Maps/map4_easy.csv"
+dest_files=["res://Maps/map4_easy.x.translation", "res://Maps/map4_easy.y.translation", "res://Maps/map4_easy.start.translation", "res://Maps/map4_easy.type.translation", "res://Maps/map4_easy.hitsound.translation", "res://Maps/map4_easy.end.translation"]
+
+[params]
+
+compress=true
+delimiter=0

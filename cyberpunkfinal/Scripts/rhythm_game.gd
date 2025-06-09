@@ -69,7 +69,30 @@ var t_judge = 1.0
 
 var t_combo = 1.0
 
-var scene = preload("res://Scenes/game.tscn").instantiate()
+var w_l0 = 0.0
+
+var w_l1 = 0.0
+
+var w_l2 = 0.0
+
+var w_l3 = 0.0
+
+var l0_fade_in = false
+var l1_fade_in = false
+var l2_fade_in = false
+var l3_fade_in = false
+
+var l0_fade_out = false
+var l1_fade_out = false
+var l2_fade_out = false
+var l3_fade_out = false
+
+var fade_factor = 0.05
+
+var scene = load("res://Scenes/game.tscn").instantiate()
+
+var last_spawned_hold = [null, null, null, null]
+
 
 func spawn_tap(lane, start_time):
 	var cur_note = tap_note.instantiate()
@@ -142,7 +165,7 @@ func judge_time(dist):
 	max_score += 4
 	show_judgement(judgement)
 	show_combo(combo)
-	$TapSoundPlayer.play()
+	
 
 func judge_l0():
 	if in_lane0.is_empty():
@@ -395,26 +418,100 @@ func register_hold(lane):
 			$HoldSoundPlayer.play()
 			last_played_hold = curtime
 		
-func set_map(in_map):
+func set_map(in_map, is_easy):
 	map = "map" + str(in_map)
-	print(map)
-	generate_queues("res://Maps/"+map+".csv")
+	var map_string = "map" + str(in_map)
+	if is_easy:
+		map_string += "_easy"
+	print(map_string)
+	generate_queues("res://Maps/"+map_string+".csv")
 	$MusicPlayer.stream = load("res://Assets/Audio/"+map+".mp3")
 	curtime = 0
 	$MusicPlayer.play()
 	
+
+func lerp_val(timer, delta, factor, vector, target):
+	timer += factor * delta
+	return [(1 - cos(PI * t_judge)) / 2, vector.lerp(target, timer)]
+
+	
 func _physics_process(delta: float) -> void:
-	t_judge += 0.1 * delta
+	#t_judge += 0.1 * delta
+	#t_judge = (1 - cos(PI * t_judge)) / 2
+	#$Camera3D/Control/Judgement.scale = $Camera3D/Control/Judgement.scale.lerp(Vector2i(1, 1), t_judge)
+	t_judge = lerp_val(t_judge, delta, 0.1, $Camera3D/Control/Judgement.scale, Vector2i(1, 1))[0]
+	$Camera3D/Control/Judgement.scale = lerp_val(t_judge, delta, 0.1, $Camera3D/Control/Judgement.scale, Vector2i(1, 1))[1]
+	t_combo = lerp_val(t_combo, delta, 0.1, $Camera3D/Control/Combo/ComboNum.scale, Vector2i(1, 1))[0]
+	$Camera3D/Control/Combo/ComboNum.scale = lerp_val(t_combo, delta, 0.1, $Camera3D/Control/Combo/ComboNum.scale, Vector2i(1, 1))[1]
 	
-	t_judge = (1 - cos(PI * t_judge)) / 2
+	if Input.is_action_just_pressed("lane0"):
+		$TapSoundPlayer.play()
+		l0_fade_in = true
+	if Input.is_action_just_released("lane0"):
+		l0_fade_in = false
+		l0_fade_out = true
+	if Input.is_action_just_pressed("lane1"):
+		$TapSoundPlayer.play()
+		l1_fade_in = true
+	if Input.is_action_just_released("lane1"):
+		l1_fade_in = false
+		l1_fade_out = true
+	if Input.is_action_just_pressed("lane2"):
+		$TapSoundPlayer.play()
+		l2_fade_in = true
+	if Input.is_action_just_released("lane2"):
+		l2_fade_in = false
+		l2_fade_out = true
+	if Input.is_action_just_pressed("lane3"):
+		$TapSoundPlayer.play()
+		l3_fade_in = true
+	if Input.is_action_just_released("lane3"):
+		l3_fade_in = false
+		l3_fade_out = true
+	# do the fades for each effect
 	
-	$Camera3D/Control/Judgement.scale = $Camera3D/Control/Judgement.scale.lerp(Vector2i(1, 1), t_judge)
 	
-	t_combo += 0.1 * delta
+	if l0_fade_in:
+		w_l0 = lerp_val(w_l0, delta, fade_factor, $VisualL0.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualL0.set_modulate(lerp_val(w_l0, delta, fade_factor, $VisualL0.get_modulate(), Color(1, 1, 1, 1))[1])
+		w_l0 = lerp_val(w_l0, delta,  fade_factor, $VisualBackL0.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualBackL0.set_modulate(lerp_val(w_l0, delta, fade_factor, $VisualBackL0.get_modulate(), Color(1, 1, 1, 1))[1])
+	elif l0_fade_out:
+		w_l0 = lerp_val(w_l0, delta, fade_factor, $VisualL0.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualL0.set_modulate(lerp_val(w_l0, delta, fade_factor, $VisualL0.get_modulate(), Color(1, 1, 1, 0))[1])
+		w_l0 = lerp_val(w_l0, delta, fade_factor, $VisualBackL0.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualBackL0.set_modulate(lerp_val(w_l0, delta, fade_factor, $VisualBackL0.get_modulate(), Color(1, 1, 1, 0))[1])
+	if l1_fade_in:
+		w_l1 = lerp_val(w_l1, delta, fade_factor, $VisualL1.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualL1.set_modulate(lerp_val(w_l1, delta, fade_factor, $VisualL1.get_modulate(), Color(1, 1, 1, 1))[1])
+		w_l1 = lerp_val(w_l1, delta,  fade_factor, $VisualBackL1.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualBackL1.set_modulate(lerp_val(w_l1, delta, fade_factor, $VisualBackL1.get_modulate(), Color(1, 1, 1, 1))[1])
+	elif l1_fade_out:
+		w_l1 = lerp_val(w_l1, delta, fade_factor, $VisualL1.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualL1.set_modulate(lerp_val(w_l1, delta, fade_factor, $VisualL1.get_modulate(), Color(1, 1, 1, 0))[1])
+		w_l1 = lerp_val(w_l1, delta,  fade_factor, $VisualBackL1.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualBackL1.set_modulate(lerp_val(w_l1, delta, fade_factor, $VisualBackL1.get_modulate(), Color(1, 1, 1, 0))[1])
+	if l2_fade_in:
+		w_l2 = lerp_val(w_l2, delta, fade_factor, $VisualL2.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualL2.set_modulate(lerp_val(w_l2, delta, fade_factor, $VisualL2.get_modulate(), Color(1, 1, 1, 1))[1])
+		w_l2 = lerp_val(w_l2, delta,  fade_factor, $VisualBackL2.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualBackL2.set_modulate(lerp_val(w_l2, delta, fade_factor, $VisualBackL2.get_modulate(), Color(1, 1, 1, 1))[1])
+	elif l2_fade_out:
+		w_l2 = lerp_val(w_l2, delta, fade_factor, $VisualL2.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualL2.set_modulate(lerp_val(w_l2, delta, fade_factor, $VisualL2.get_modulate(), Color(1, 1, 1, 0))[1])
+		w_l2 = lerp_val(w_l2, delta,  fade_factor, $VisualBackL2.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualBackL2.set_modulate(lerp_val(w_l2, delta, fade_factor, $VisualBackL2.get_modulate(), Color(1, 1, 1, 0))[1])
+	if l3_fade_in:
+		w_l3 = lerp_val(w_l3, delta, fade_factor, $VisualL3.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualL3.set_modulate(lerp_val(w_l3, delta, fade_factor, $VisualL3.get_modulate(), Color(1, 1, 1, 1))[1])
+		w_l3 = lerp_val(w_l3, delta,  fade_factor, $VisualBackL3.get_modulate(), Color(1, 1, 1, 1))[0]
+		$VisualBackL3.set_modulate(lerp_val(w_l3, delta, fade_factor, $VisualBackL3.get_modulate(), Color(1, 1, 1, 1))[1])
+	elif l3_fade_out:
+		w_l3 = lerp_val(w_l3, delta, fade_factor, $VisualL3.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualL3.set_modulate(lerp_val(w_l3, delta, fade_factor, $VisualL3.get_modulate(), Color(1, 1, 1, 0))[1])
+		w_l3 = lerp_val(w_l3, delta,  fade_factor, $VisualBackL3.get_modulate(), Color(1, 1, 1, 0))[0]
+		$VisualBackL3.set_modulate(lerp_val(w_l3, delta, fade_factor, $VisualBackL3.get_modulate(), Color(1, 1, 1, 0))[1])
 	
-	t_combo = (1 - cos(PI * t_combo)) / 2
-	
-	$Camera3D/Control/Combo/ComboNum.scale = $Camera3D/Control/Combo/ComboNum.scale.lerp(Vector2i(1, 1), t_combo)
 	
 	check_and_spawn()
 	curtime += delta*1000
@@ -425,12 +522,12 @@ func _physics_process(delta: float) -> void:
 	
 	if in_lane0.is_empty() and in_lane1.is_empty() and in_lane2.is_empty() and in_lane3.is_empty():
 		if lane0_queue.is_empty() and lane1_queue.is_empty() and lane2_queue.is_empty() and lane3_queue.is_empty():
-			print(scene)
-			get_tree().root.add_child(scene)
-			# update the hair value to the new scene
-			get_node("/root/GameManager").show_results(float(score)/(max_score))
-			# free the current scene
-			get_node("/root/RhythmGame").free()
+			if $MusicPlayer.playing == false:
+				get_tree().root.add_child(scene)
+				# update the hair value to the new scene
+				get_node("/root/GameManager").show_results(float(score)/(max_score))
+				# free the current scene
+				get_node("/root/RhythmGame").free()
 	
 func _ready() -> void:
 	scene = load("res://Scenes/game.tscn").instantiate()

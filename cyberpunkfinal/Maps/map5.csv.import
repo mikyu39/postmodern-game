@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://17fxn47n6ej0"
+
+[deps]
+
+files=["res://Maps/map5.x.translation", "res://Maps/map5.y.translation", "res://Maps/map5.start.translation", "res://Maps/map5.type.translation", "res://Maps/map5.hitsound.translation", "res://Maps/map5.end.translation"]
+
+source_file="res://Maps/map5.csv"
+dest_files=["res://Maps/map5.x.translation", "res://Maps/map5.y.translation", "res://Maps/map5.start.translation", "res://Maps/map5.type.translation", "res://Maps/map5.hitsound.translation", "res://Maps/map5.end.translation"]
+
+[params]
+
+compress=true
+delimiter=0
