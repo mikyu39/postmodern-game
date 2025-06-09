@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bwt41wajxe02v"
+
+[deps]
+
+files=["res://Build/Maps/map3_easy.x.translation", "res://Build/Maps/map3_easy.y.translation", "res://Build/Maps/map3_easy.start.translation", "res://Build/Maps/map3_easy.type.translation", "res://Build/Maps/map3_easy.hitsound.translation", "res://Build/Maps/map3_easy.end.translation"]
+
+source_file="res://Build/Maps/map3_easy.csv"
+dest_files=["res://Build/Maps/map3_easy.x.translation", "res://Build/Maps/map3_easy.y.translation", "res://Build/Maps/map3_easy.start.translation", "res://Build/Maps/map3_easy.type.translation", "res://Build/Maps/map3_easy.hitsound.translation", "res://Build/Maps/map3_easy.end.translation"]
+
+[params]
+
+compress=true
+delimiter=0

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CyberpunkFinal"
-run/main_scene="uid://crhv720fujilk"
+run/main_scene="uid://c070oyolrxtdn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Assets/icon.svg"
 

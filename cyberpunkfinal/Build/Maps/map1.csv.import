@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cbqwtretviwkq"
+
+[deps]
+
+files=["res://Build/Maps/map1.x.translation", "res://Build/Maps/map1.y.translation", "res://Build/Maps/map1.start.translation", "res://Build/Maps/map1.type.translation", "res://Build/Maps/map1.hitsound.translation", "res://Build/Maps/map1.end.translation"]
+
+source_file="res://Build/Maps/map1.csv"
+dest_files=["res://Build/Maps/map1.x.translation", "res://Build/Maps/map1.y.translation", "res://Build/Maps/map1.start.translation", "res://Build/Maps/map1.type.translation", "res://Build/Maps/map1.hitsound.translation", "res://Build/Maps/map1.end.translation"]
+
+[params]
+
+compress=true
+delimiter=0

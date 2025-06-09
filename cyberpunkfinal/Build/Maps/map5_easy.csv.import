@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bb71re63bexmd"
+
+[deps]
+
+files=["res://Build/Maps/map5_easy.x.translation", "res://Build/Maps/map5_easy.y.translation", "res://Build/Maps/map5_easy.start.translation", "res://Build/Maps/map5_easy.type.translation", "res://Build/Maps/map5_easy.hitsound.translation", "res://Build/Maps/map5_easy.end.translation"]
+
+source_file="res://Build/Maps/map5_easy.csv"
+dest_files=["res://Build/Maps/map5_easy.x.translation", "res://Build/Maps/map5_easy.y.translation", "res://Build/Maps/map5_easy.start.translation", "res://Build/Maps/map5_easy.type.translation", "res://Build/Maps/map5_easy.hitsound.translation", "res://Build/Maps/map5_easy.end.translation"]
+
+[params]
+
+compress=true
+delimiter=0
