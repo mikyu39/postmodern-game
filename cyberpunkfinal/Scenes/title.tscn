@@ -47,24 +47,59 @@ text = "Replicant Hunt"
 
 [node name="Start" type="Button" parent="Panel"]
 layout_mode = 0
-offset_left = 192.0
-offset_top = 120.0
-offset_right = 264.0
-offset_bottom = 149.0
+offset_left = 75.0
+offset_top = 137.0
+offset_right = 147.0
+offset_bottom = 166.0
 theme_override_fonts/font = ExtResource("4_3eqdi")
 theme_override_font_sizes/font_size = 20
 text = "Start"
 
 [node name="Difficulty" type="Button" parent="Panel"]
 layout_mode = 0
-offset_left = 131.0
-offset_top = 179.0
-offset_right = 330.0
-offset_bottom = 208.0
+offset_left = 238.0
+offset_top = 185.0
+offset_right = 437.0
+offset_bottom = 214.0
 theme_override_fonts/font = ExtResource("4_3eqdi")
 theme_override_font_sizes/font_size = 20
 text = "Difficulty: Easy
 "
+
+[node name="SpeedLabel" type="RichTextLabel" parent="Panel"]
+layout_mode = 0
+offset_left = 268.0
+offset_top = 120.0
+offset_right = 436.0
+offset_bottom = 160.0
+theme_override_fonts/normal_font = ExtResource("4_3eqdi")
+text = "Note Speed: 43"
+
+[node name="NoteSpeed" type="HSlider" parent="Panel"]
+layout_mode = 0
+offset_left = 257.0
+offset_top = 143.0
+offset_right = 408.0
+offset_bottom = 159.0
+min_value = 30.0
+max_value = 55.0
+value = 43.0
+
+[node name="OffsetLabel" type="RichTextLabel" parent="Panel"]
+offset_left = 277.0
+offset_top = 71.0
+offset_right = 480.0
+offset_bottom = 111.0
+theme_override_fonts/normal_font = ExtResource("4_3eqdi")
+text = "Offset: 0 ms"
+
+[node name="Offset" type="HSlider" parent="Panel"]
+offset_left = 257.0
+offset_top = 91.0
+offset_right = 408.0
+offset_bottom = 107.0
+min_value = -100.0
+rounded = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(272, 144)
@@ -72,3 +107,5 @@ zoom = Vector2(2.25, 2.25)
 
 [connection signal="pressed" from="Panel/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Panel/Difficulty" to="." method="_on_difficulty_pressed"]
+[connection signal="value_changed" from="Panel/NoteSpeed" to="." method="_on_note_speed_value_changed"]
+[connection signal="value_changed" from="Panel/Offset" to="." method="_on_offset_value_changed"]

@@ -33,6 +33,10 @@ var maps = [1,2,3,4,5]
 
 var winning = false
 
+var note_speed = 0
+
+var offset = 0
+
 @onready 
 var scene = load("res://Scenes/rhythm_game.tscn").instantiate()
 
@@ -105,7 +109,9 @@ func show_results(accuracy):
 	$Camera2D/Results.visible = true
 	
 	
-func set_game(difficulty):
+func set_game(difficulty, speed, off):
+	note_speed = speed
+	offset = off
 	is_easy = difficulty
 	replicant.shuffle()
 	maps.shuffle()
@@ -124,7 +130,7 @@ func _physics_process(delta: float) -> void:
 		if can_psycho:
 			get_tree().root.add_child(scene)
 			# update the hair value to the new scene
-			get_node("/root/RhythmGame").set_map(map, is_easy)
+			get_node("/root/RhythmGame").set_map(map, is_easy, note_speed, offset)
 			# free the current scene
 			get_node("/root/GameManager").free()
 		if can_interact_npc:

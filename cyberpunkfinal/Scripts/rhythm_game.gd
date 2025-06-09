@@ -418,7 +418,9 @@ func register_hold(lane):
 			$HoldSoundPlayer.play()
 			last_played_hold = curtime
 		
-func set_map(in_map, is_easy):
+func set_map(in_map, is_easy, speed, off):
+	note_speed = speed
+	timer_offset = off
 	map = "map" + str(in_map)
 	var map_string = "map" + str(in_map)
 	if is_easy:
